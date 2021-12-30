@@ -2,9 +2,9 @@
   "project_name": "hypermodern-python",
   "package_name": "{{ cookiecutter.project_name.replace('-', '_') }}",
   "friendly_name": "{{ cookiecutter.project_name.replace('-', ' ').title() }}",
-  "author": "Claudio Jolowicz",
-  "email": "mail@claudiojolowicz.com",
-  "github_user": "cjolowicz",
+  "author": "mpourmpoulis",
+  "email": "35875229+mpourmpoulis@users.noreply.github.com",
+  "github_user": ["mpourmpoulis","PythonVoiceCodingPlugin"],
   "version": "0.0.0",
   "license": ["MIT", "Apache-2.0", "GPL-3.0"],
   "development_status": [
