@@ -9,8 +9,7 @@ from textwrap import dedent
 import nox
 
 try:
-    from nox_poetry import Session
-    from nox_poetry import session
+    from nox_poetry import Session, session
 except ImportError:
     message = f"""\
     Nox failed to import the 'nox-poetry' package.
@@ -33,6 +32,12 @@ nox.options.sessions = (
     "xdoctest",
     "docs-build",
 )
+
+
+def group(g: str):
+    with open('pyproject.toml', 'r') as fp:
+        data = toml.load(fp)
+    return data["tools"]["poetry"]["group"][g].keys()
 
 
 def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
@@ -90,7 +95,8 @@ def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
         text = hook.read_text()
 
         if not any(
-            Path("A") == Path("a") and bindir.lower() in text.lower() or bindir in text
+            Path("A") == Path("a") and bindir.lower(
+            ) in text.lower() or bindir in text
             for bindir in bindirs
         ):
             continue
@@ -109,18 +115,7 @@ def precommit(session: Session) -> None:
     """Lint using pre-commit."""
     args = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
     session.install(
-        "black",
-        "darglint",
-        "flake8",
-        "flake8-bandit",
-        "flake8-bugbear",
-        "flake8-docstrings",
-        "flake8-rst-docstrings",
-        "pep8-naming",
-        "pre-commit",
-        "pre-commit-hooks",
-        "pyupgrade",
-        "reorder-python-imports",
+        *group("pre-commit")
     )
     session.run("pre-commit", *args)
     if args and args[0] == "install":
@@ -143,16 +138,17 @@ def mypy(session: Session) -> None:
     session.install("mypy", "pytest")
     session.run("mypy", *args)
     if not session.posargs:
-        session.run("mypy", f"--python-executable={sys.executable}", "noxfile.py")
+        session.run(
+            "mypy", f"--python-executable={sys.executable}", "noxfile.py")
 
 
 @session(python=python_versions)
 def tests(session: Session) -> None:
     """Run the test suite."""
     session.install(".")
-    session.install( "pytest", "pygments")
+    session.install(*group("tests"))
     try:
-        session.run( "pytest", *session.posargs)
+        session.run("pytest", *session.posargs)
     finally:
         if session.interactive:
             session.notify("coverage", posargs=[])
@@ -169,7 +165,6 @@ def coverage(session: Session) -> None:
         session.run("coverage", "combine")
 
     session.run("coverage", *args)
-
 
 
 @session(python=python_versions)
@@ -194,8 +189,7 @@ def docs_build(session: Session) -> None:
     if not session.posargs and "FORCE_COLOR" in os.environ:
         args.insert(0, "--color")
 
-    session.install(".")
-    session.install("sphinx", "sphinx-click", "furo")
+    session.install(".", *group("docs"))
 
     build_dir = Path("docs", "_build")
     if build_dir.exists():
@@ -208,8 +202,7 @@ def docs_build(session: Session) -> None:
 def docs(session: Session) -> None:
     """Build and serve the documentation with live reloading on file changes."""
     args = session.posargs or ["--open-browser", "docs", "docs/_build"]
-    session.install(".")
-    session.install("sphinx", "sphinx-autobuild", "sphinx-click", "furo")
+    session.install(".", *group("docs"))
 
     build_dir = Path("docs", "_build")
     if build_dir.exists():
