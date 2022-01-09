@@ -28,8 +28,8 @@ nox.options.sessions = (
     "safety",
     "mypy",
     "tests",
-    "typeguard",
-    "xdoctest",
+
+
     "docs-build",
 )
 
@@ -165,21 +165,6 @@ def coverage(session: Session) -> None:
         session.run("coverage", "combine")
 
     session.run("coverage", *args)
-
-
-@session(python=python_versions)
-def xdoctest(session: Session) -> None:
-    """Run examples with xdoctest."""
-    if session.posargs:
-        args = [package, *session.posargs]
-    else:
-        args = [f"--modname={package}", "--command=all"]
-        if "FORCE_COLOR" in os.environ:
-            args.append("--colored=1")
-
-    session.install(".")
-    session.install("xdoctest[colors]")
-    session.run("python", "-m", "xdoctest", *args)
 
 
 @session(name="docs-build", python=python_versions[0])
