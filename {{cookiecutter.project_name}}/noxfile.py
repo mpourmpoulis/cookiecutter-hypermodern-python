@@ -5,6 +5,7 @@ import shutil
 import sys
 from pathlib import Path
 from textwrap import dedent
+from typing import Iterable
 
 import nox
 
@@ -34,10 +35,10 @@ nox.options.sessions = (
 )
 
 
-def group(g: str):
-    with open('pyproject.toml', 'r') as fp:
-        data = toml.load(fp)
-    return data["tools"]["poetry"]["group"][g].keys()
+def group(g: str) -> Iterable[str]:
+    with open("pyproject.toml", "r") as fp:
+        data = toml.loads(fp.read())
+    return data["tools"]["poetry"]["group"][g]["dependencies"].keys()
 
 
 def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
@@ -138,9 +139,6 @@ def mypy(session: Session) -> None:
     session.install(".")
     session.install("mypy", "pytest")
     session.run("mypy", *args)
-    if not session.posargs:
-        session.run(
-            "mypy", f"--python-executable={sys.executable}", "noxfile.py")
 
 
 @session(python=python_versions)

@@ -49,6 +49,15 @@ You need Python 3.7+ and the following tools:
 - Nox_
 - nox-poetry_
 
+
+You should install the prerelease for poetry 
+
+.. code:: console
+
+   $ pipx install poetry==1.2.0a2
+
+
+
 Install the package with development requirements:
 
 .. code:: console
