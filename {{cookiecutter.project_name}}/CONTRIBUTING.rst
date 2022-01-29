@@ -2,7 +2,7 @@ Contributor Guide
 =================
 
 Thank you for your interest in improving this project.
-This project is open-source under the `{{cookiecutter.license.replace("-", " ")}} license`_ and
+This project is open-source under the `GPL 3.0 license`_ and
 welcomes contributions in the form of bug reports, feature requests, and pull requests.
 
 Here is a list of important resources for contributors:
@@ -12,10 +12,10 @@ Here is a list of important resources for contributors:
 - `Issue Tracker`_
 - `Code of Conduct`_
 
-.. _{{cookiecutter.license.replace("-", " ")}} license: https://opensource.org/licenses/{{cookiecutter.license}}
-.. _Source Code: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}
-.. _Documentation: https://{{cookiecutter.project_name}}.readthedocs.io/
-.. _Issue Tracker: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}/issues
+.. _GPL 3.0 license: https://opensource.org/licenses/GPL-3.0
+.. _Source Code: https://github.com/PythonVoiceCodingPlugin/pyvoice
+.. _Documentation: https://pyvoice.readthedocs.io/
+.. _Issue Tracker: https://github.com/PythonVoiceCodingPlugin/pyvoice/issues
 
 How to report a bug
 -------------------
@@ -49,8 +49,13 @@ You need Python 3.7+ and the following tools:
 - Nox_
 - nox-poetry_
 
+then you need to install hooks for pre-commit
 
-You should install the prerelease for poetry 
+.. code:: console
+
+   $ nox -rs pre-commit -- install
+
+You should install the prerelease for poetry
 
 .. code:: console
 
@@ -70,7 +75,7 @@ or the command-line interface:
 .. code:: console
 
    $ poetry run python
-   $ poetry run {{cookiecutter.project_name}}
+   $ poetry run pyvoice
 
 .. _Poetry: https://python-poetry.org/
 .. _Nox: https://nox.thea.codes/
@@ -127,6 +132,6 @@ To run linting and code formatting checks before committing your change, you can
 It is recommended to open an issue before starting work on anything.
 This will allow a chance to talk it over with the owners and validate your approach.
 
-.. _pull request: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}/pulls
+.. _pull request: https://github.com/PythonVoiceCodingPlugin/pyvoice/pulls
 .. github-only
 .. _Code of Conduct: CODE_OF_CONDUCT.rst
