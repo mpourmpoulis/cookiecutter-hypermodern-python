@@ -8,6 +8,7 @@ from textwrap import dedent
 from typing import Iterable
 
 import nox
+import tomlkit as toml
 
 try:
     from nox_poetry import Session, session
@@ -38,7 +39,7 @@ nox.options.sessions = (
 def group(g: str) -> Iterable[str]:
     with open("pyproject.toml", "r") as fp:
         data = toml.loads(fp.read())
-    return data["tools"]["poetry"]["group"][g]["dependencies"].keys()
+    return data["tool"]["poetry"]["group"][g]["dependencies"].keys()
 
 
 def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
