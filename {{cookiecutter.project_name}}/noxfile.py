@@ -81,6 +81,10 @@ def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
             VIRTUAL_ENV={shlex.quote(virtualenv)}
             PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
             """,
+        "sh": f"""\
+            VIRTUAL_ENV={shlex.quote(virtualenv)}
+            PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
+            """
     }
 
     hookdir = Path(".git") / "hooks"
